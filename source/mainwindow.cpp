@@ -39,12 +39,14 @@ void MainWindow::onResultGet(QNetworkReply* reply)
 void MainWindow::on_from_textEdited(const QString &arg1)
 {
     from = arg1;
+    from = from.toUpper();
 }
 
 
 void MainWindow::on_to_textEdited(const QString &arg1)
 {
     to = arg1;
+    to = to.toUpper();
 }
 
 
@@ -61,6 +63,10 @@ void MainWindow::on_convert_clicked()
 
             QJsonObject from = objValute.value(this->from).toObject(); // получаем объект исходной валюты из списка всех валют объекта Valute json файла
             QJsonObject to = objValute.value(this->to).toObject(); // получаем объект нужной валюты из списка всех валют объекта Valute json файла
+
+            if (this->from.size() != 3 || this->to.size() != 3) {
+                throw "Wrong valute input!";
+            }
 
             double fromRate = from.value("Value").toDouble();
             double toRate = to.value("Value").toDouble();
@@ -81,6 +87,10 @@ void MainWindow::on_convert_clicked()
             QJsonObject from = objValute.value(this->from).toObject();
             QJsonObject to = objValute.value(this->to).toObject();
 
+            if (this->from.size() != 3 || this->to.size() != 3) {
+                throw "Wrong valute input!";
+            }
+
             int fromNominal = from.value("Nominal").toInt();
             int toNominal = to.value("Nominal").toInt();
 
@@ -98,7 +108,6 @@ void MainWindow::on_convert_clicked()
                 throw "Wrong input!";
             }
 
-            qDebug() << sumToConvert << " " << rate;
         }
     }
     catch (const char* msg) {
